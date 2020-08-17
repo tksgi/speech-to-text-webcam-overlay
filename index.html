@@ -558,15 +558,13 @@
     function sendTextToSlack(result_transcript){
         console.log(result_transcript);
         console.log(document.getElementById('checkbox_slack').checked);
-        if(document.getElementById('checkbox_slack').checked){
+        if(document.getElementById('checkbox_slack').checked && document.getElementById('textbox_slack_channel').value != ''){
             const endpoint = document.getElementById('textbox_slack_url').value;
             console.log(endpoint);
             const data = {
               text: result_transcript,
               as_user: true,
-            }
-            if(document.getElementById('textbox_slack_channel').value != '') {
-              data['channel'] = document.getElementById('textbox_slack_channel').value;
+              channel: document.getElementById('textbox_slack_channel').value,
             }
             const req = new XMLHttpRequest();
             req.open('POST', endpoint, false);
