@@ -239,6 +239,7 @@
                 音声認識の結果をslackに投稿する：  <input type="checkbox" id="checkbox_slack" name="checkbox_slack" value="slack"><br/>
                 webhook_URL: <input type="text" id="textbox_slack_url">
                 channel: <input type="text" id="textbox_slack_channel">
+                表示名: <input type="text" id="textbox_slack_user_name">
             </div>
         </div>
         <div id="log" class="log_wrapper">
@@ -561,8 +562,12 @@
         if(document.getElementById('checkbox_slack').checked && document.getElementById('textbox_slack_channel').value != ''){
             const endpoint = document.getElementById('textbox_slack_url').value;
             console.log(endpoint);
+            let text = result_transcript;
+            if(document.getElementById('textbox_slack_user_name').value != ''){
+              text = `${document.getElementById('textbox_slack_user_name').value}: 「${text}」`;
+            }
             const data = {
-              text: result_transcript,
+              text: text,
               as_user: true,
               channel: document.getElementById('textbox_slack_channel').value,
             }
