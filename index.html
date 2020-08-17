@@ -235,6 +235,10 @@
                 翻訳：
                 <div id="google_translate_element" class="select_translation selector"></div>
             </div>
+            <div class="control_selector_wrapper">
+                音声認識の結果をslackに投稿する：  <input type="checkbox" id="checkbox_slack" name="checkbox_slack" value="slack">
+                webhook_URL: <input type="text" id="textbox_slack">
+            </div>
         </div>
         <div id="log" class="log_wrapper">
             <div class="control_header">認識結果のログ</div>
@@ -482,6 +486,7 @@
 
                     document.getElementById('result_log').insertAdjacentHTML('beforeend', result_transcript+'\n');
                     textAreaHeightSet(document.getElementById('result_log'));
+                    sendTextToSlack(result_transcript);
                     vr_function();
                     flag_speech = 0;
                 } else {
@@ -546,6 +551,23 @@
         if(wSclollHeight < (wLineH * 2)){wSclollHeight=(wLineH * 2);}
         // テキストエリアの高さを設定する
         argObj.style.height = wSclollHeight + "px";
+    }
+
+    // 認識結果をAPIに送信する
+    function sendTextToSlack(result_transcript){
+        console.log(result_transcript);
+        console.log(document.getElementById('checkbox_slack').checked);
+        if(document.getElementById('checkbox_slack').checked){
+            const endpoint = document.getElementById('textbox_slack').value;
+            console.log(endpoint);
+            const data = {
+              text: result_transcript,
+            }
+            const req = new XMLHttpRequest();
+            req.open('POST', endpoint, false);
+            req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+            req.send(`payload=${JSON.stringify(data)}`);
+        }
     }
 
     // 認識を手動で止める（文を区切る）
@@ -952,6 +974,7 @@
         document.querySelector('#select_font').addEventListener('change', updateConfigValue);
         document.querySelector('#checkbox_timestamp').addEventListener('input', function(e) {updateConfig(e.target.id, e.target.checked)});
         document.querySelector('#checkbox_hiragana').addEventListener('input', function(e) {updateConfig(e.target.id, e.target.checked)});
+        document.querySelector('#checkbox_slack').addEventListener('input', function(e) {updateConfig(e.target.id, e.target.checked)});
         document.querySelector('#select_autoclear_text').addEventListener('change', updateConfigValue);
     }
 
