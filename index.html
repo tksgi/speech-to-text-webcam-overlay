@@ -236,7 +236,7 @@
                 <div id="google_translate_element" class="select_translation selector"></div>
             </div>
             <div class="control_selector_wrapper">
-                音声認識の結果をslackに投稿する：  <input type="checkbox" id="checkbox_slack" name="checkbox_slack" value="slack">
+                音声認識の結果をslackに投稿する：  <input type="checkbox" id="checkbox_slack" name="checkbox_slack" value="slack"><br/>
                 webhook_URL: <input type="text" id="textbox_slack_url">
                 channel: <input type="text" id="textbox_slack_channel">
             </div>
@@ -563,6 +563,7 @@
             console.log(endpoint);
             const data = {
               text: result_transcript,
+              as_user: true,
             }
             if(document.getElementById('textbox_slack_channel').value != '') {
               data['channel'] = document.getElementById('textbox_slack_channel').value;
