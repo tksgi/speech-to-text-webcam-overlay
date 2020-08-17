@@ -237,7 +237,8 @@
             </div>
             <div class="control_selector_wrapper">
                 音声認識の結果をslackに投稿する：  <input type="checkbox" id="checkbox_slack" name="checkbox_slack" value="slack">
-                webhook_URL: <input type="text" id="textbox_slack">
+                webhook_URL: <input type="text" id="textbox_slack_url">
+                channel: <input type="text" id="textbox_slack_channel">
             </div>
         </div>
         <div id="log" class="log_wrapper">
@@ -553,15 +554,18 @@
         argObj.style.height = wSclollHeight + "px";
     }
 
-    // 認識結果をAPIに送信する
+    // 認識結果をSlackに送信する
     function sendTextToSlack(result_transcript){
         console.log(result_transcript);
         console.log(document.getElementById('checkbox_slack').checked);
         if(document.getElementById('checkbox_slack').checked){
-            const endpoint = document.getElementById('textbox_slack').value;
+            const endpoint = document.getElementById('textbox_slack_url').value;
             console.log(endpoint);
             const data = {
               text: result_transcript,
+            }
+            if(document.getElementById('textbox_slack_channel').value != '') {
+              data['channel'] = document.getElementById('textbox_slack_channel').value;
             }
             const req = new XMLHttpRequest();
             req.open('POST', endpoint, false);
